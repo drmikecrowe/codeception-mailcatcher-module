@@ -162,7 +162,7 @@ class MailCatcher extends Module
     /**
      * Grab current count of inbox emails
      *
-     * Simply returns a count of current emails in the inbox
+     * Simply returns a count of current emails.
      *
      * @return integer
      * @author Mike Crowe <drmikecrowe@gmail.com>
@@ -171,6 +171,20 @@ class MailCatcher extends Module
     {
         $messages = $this->messages();
         return count($messages);
+    }
+
+
+    /**
+     * Test email count equals expected value
+     *
+     * @return void
+     * @author Mike Crowe <drmikecrowe@gmail.com>
+     **/
+    public function seeEmailCount($expected) 
+    {
+        $messages = $this->messages();
+        $count = count($messages);
+        $this->assertEquals($count,$expected);
     }
 
     // ----------- HELPER METHODS BELOW HERE -----------------------//
