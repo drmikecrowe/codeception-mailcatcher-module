@@ -158,6 +158,21 @@ class MailCatcher extends Module
         return $matches[0];
     }
 
+
+    /**
+     * Grab current count of inbox emails
+     *
+     * Simply returns a count of current emails in the inbox
+     *
+     * @return integer
+     * @author Mike Crowe <drmikecrowe@gmail.com>
+     **/
+    public function grabEmailCount() 
+    {
+        $messages = $this->messages();
+        return count($messages);
+    }
+
     // ----------- HELPER METHODS BELOW HERE -----------------------//
 
     /**
