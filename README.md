@@ -1,5 +1,7 @@
 # Codeception MailCatcher Module
 
+[![Build Status](https://travis-ci.org/captbaritone/codeception-mailcatcher-module.svg)](https://travis-ci.org/captbaritone/codeception-mailcatcher-module)
+
 This module will let you test emails that are sent during your Codeception
 acceptance tests. It depends upon you having
 [MailCatcher](http://mailcatcher.me/) installed on your development server.
@@ -16,7 +18,7 @@ Add the package into your composer.json:
     {
         "require-dev": {
             "codeception/codeception": "*",
-            "captbaritone/mailcatcher-codeception-module": "dev-master"
+            "captbaritone/mailcatcher-codeception-module": "1.*"
         }
     }
 
@@ -36,11 +38,37 @@ port of your site's MailCatcher installation:
                 url: 'http://project.dev'
                 port: '1080'
 
+You will then need to rebuild your actor class:
+
+    php codecept.phar build
+
+## Optional Configuration
+
+If you need to specify some special options (e.g. SSL verification or authentication
+headers), you can set all of the allowed [Guzzle request options](https://guzzle.readthedocs.org/en/5.3/clients.html#request-options):
+
+    class_name: WebGuy
+    modules:
+        enabled:
+            - MailCatcher
+        config:
+            MailCatcher:
+                url: 'http://project.dev'
+                port: '1080'
+                guzzleRequestOptions:
+                    verify: false
+                    debug: true
+                    version: 1.0
+
+You will then need to rebuild your actor class:
+
+    php codecept.phar build
+
 ## Example Usage
 
     <?php
 
-    $I = new WebGuy\AdminSteps($scenario);
+    $I = new WebGuy($scenario);
     $I->wantTo('Get a password reset email');
 
     // Cleared old emails from MailCatcher
@@ -155,6 +183,28 @@ Example:
 
 * Param $regex
 
+### lastMessageFrom
+
+Grab the full email object sent to an address.
+
+Example:
+
+    <?php
+    $email = $I->lastMessageFrom('example@example.com');
+    $I->assertNotEmpty($email['attachments']);
+    ?>
+
+### lastMessage
+
+Grab the full email object from the last email.
+
+Example:
+
+    <?php
+    $email = $I->grabLastEmail();
+    $I->assertNotEmpty($email['attachments']);
+    ?>
+
 ### grabMatchesFromLastEmailTo
 
 Extracts an array of matches and sub-matches from the last email to a given
@@ -185,6 +235,19 @@ Example:
 
 * Param $email
 * Param $regex
+
+### seeEmailCount
+
+Asserts that a certain number of emails have been sent since the last time
+`resetEmails()` was called.
+
+Example:
+
+    <?php
+    $match = $I->seeEmailCount(2);
+    ?>
+
+* Param $count
 
 # License
 
