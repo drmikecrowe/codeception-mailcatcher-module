@@ -74,7 +74,7 @@ You will then need to rebuild your actor class:
     // Cleared old emails from MailCatcher
     $I->resetEmails();
 
-    // Reset 
+    // Reset
     $I->amOnPage('forgotPassword.php');
     $I->fillField("input[name='email']", 'user@example.com');
     $I->click("Submit");
@@ -183,6 +183,60 @@ Example:
 
 * Param $regex
 
+### grabAllEmails
+
+Retrieves the full raw text of the email: headers, subject line, and body.
+
+Example:
+
+    <?php
+    $match = $I->grabAllEmails();
+    ?>
+
+Returns:
+
+    [
+        0 => [
+            "id" => 1
+            "sender" => <from@email.com>
+            "recipients" => [
+                0 => <to@email.com>
+            ]
+            "subject" => Here's my subject
+            "source" => Date: Mon, 10 Oct 2016 22:55:55 -0400
+    Return-Path: from@email.com
+    To: to@email.com
+    From: From <from@email.com>
+    Subject: Here's my subject
+    Message-ID: <5b83a7747e4065e19ac2f833311e1a9e@tld.com>
+    X-Priority: 3
+    X-Mailer: PHPMailer 5.2.1 (http://code.google.com/a/apache-extras.org/p/phpmailer/]
+    MIME-Version: 1.0
+    Content-Transfer-Encoding: 8bit
+    Content-Type: text/html; charset="utf-8"
+
+    Here's the body
+
+            "size" => 3696
+            "type" => text/html
+            "created_at" => 2016-10-11T02:55:55.000+00:00
+            "formats" => [
+                "0" => html
+            ]
+            "attachments" => []
+        ],
+        1 => [
+            "id" => 2
+            "sender" => <from@email.com>
+            "recipients" => [
+                "0" => <to@email.com>
+            ]
+            "subject" => Here's my subject
+            ....
+        ]
+    ]
+
+
 ### lastMessageFrom
 
 Grab the full email object sent to an address.
@@ -235,6 +289,16 @@ Example:
 
 * Param $email
 * Param $regex
+
+### grabEmailCount
+
+Returns the total count of emails in the mailcatcher queue.
+
+Example:
+
+    <?php
+    $match = $I->grabEmailCount();
+    ?>
 
 ### seeEmailCount
 
